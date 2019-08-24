@@ -2,7 +2,7 @@
 ![macos](https://img.shields.io/static/v1?logo=apple&label=&message=?&color=orange)
 ![linux](https://img.shields.io/static/v1?logo=linux&label=&message=?&color=orange)
 
-<h1 align="center">QuickHAB</h1>
+<h3 align="center">QuickHAB</h3>
 <p align="center">
     A simple system tray app to send commands to your Items on OpenHAB.
 </p>
