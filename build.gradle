@@ -1,0 +1,41 @@
+// Gradle plugins
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.50'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+}
+
+// Details about this app
+group 'com.jjv360'
+version '1.0.0'
+sourceCompatibility = 1.8
+mainClassName = 'MainKt'
+
+// Location of source code files
+sourceSets {
+    main {
+        java {
+            srcDirs 'src'
+        }
+        resources {
+            srcDirs "resources"
+        }
+    }
+}
+
+// Dependencies
+repositories {
+    mavenCentral()
+    jcenter()
+}
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
+    implementation 'com.beust:klaxon:5.0.1'
+}
+
+// Other flags
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
