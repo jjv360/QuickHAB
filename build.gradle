@@ -8,9 +8,16 @@ plugins {
 
 // Details about this app
 group 'com.jjv360'
-version '1.0.0'
+version '1.0.1'
 sourceCompatibility = 1.8
 mainClassName = 'MainKt'
+
+// Ensure our version number is encoded into the JAR
+jar {
+    manifest {
+        attributes 'Implementation-Version': version
+    }
+}
 
 // Location of source code files
 sourceSets {

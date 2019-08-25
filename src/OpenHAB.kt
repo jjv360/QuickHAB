@@ -19,6 +19,12 @@ import java.net.URL
 import javax.swing.JMenuItem
 import javax.swing.JOptionPane
 import javax.swing.UIManager
+import java.util.logging.Level.SEVERE
+import sun.util.logging.PlatformLogger
+import java.io.InputStream
+import java.net.URLDecoder
+import java.util.*
+import java.util.jar.Manifest
 
 
 /**
@@ -32,11 +38,14 @@ class OpenHAB {
         var tags : List<String> = listOf()
     }
 
+    /** Preferences */
+    private val prefs = Prefs("QuickHAB")
+
     /** Tray icon */
     private val trayIcon : TrayIcon
 
     /** Server base address */
-    private var serverAddress = "http://localhost:8080"
+    private var serverAddress = prefs.props.getProperty("server", "http://localhost:8080")
 
     /** Last fetch error */
     private var error = ""
@@ -45,7 +54,7 @@ class OpenHAB {
     private var items : List<Item> = listOf()
 
     /** The tag that an Item must have in order to show up in our list */
-    private var queryTag = "QuickHAB"
+    private var queryTag = prefs.props.getProperty("queryTag", "QuickHAB")
 
     init {
 
@@ -63,6 +72,23 @@ class OpenHAB {
 
         // Update UI
         refresh()
+
+    }
+
+    /** Get app version */
+    val version : String get() {
+
+        try {
+
+            // Fetch value from manifest
+            return Manifest(this.javaClass.getResourceAsStream("META-INF/MANIFEST.MF")).mainAttributes.getValue("Implementation-Version")
+
+        } catch (err : Exception) {
+
+            // No manifest
+            return "(unpackaged)"
+
+        }
 
     }
 
@@ -113,6 +139,11 @@ class OpenHAB {
         server.addActionListener { onServer() }
         settings.add(server)
 
+        // Settings menu - tag name
+        val tag = MenuItem("Tag: " + queryTag)
+        tag.addActionListener { onTagChange() }
+        settings.add(tag)
+
         if (items.isNotEmpty()) {
 
             // Settings menu - divider
@@ -141,7 +172,7 @@ class OpenHAB {
         // Create about button
         val about = MenuItem("About")
         about.addActionListener {
-            JOptionPane.showMessageDialog(null, "This app allows you to quickly send ON actions to your OpenHAB items. You can select which items appear in the Settings menu. All items with a '$queryTag' tag attached will appear in the menu.", "QuickHAB", JOptionPane.INFORMATION_MESSAGE)
+            JOptionPane.showMessageDialog(null, "This app allows you to quickly send ON actions to your OpenHAB items. You can select which items appear in the Settings menu. All items with a '$queryTag' tag attached will appear in the menu.", "QuickHAB $version", JOptionPane.INFORMATION_MESSAGE)
         }
         trayIcon.popupMenu.add(about)
 
@@ -159,7 +190,7 @@ class OpenHAB {
         try {
 
             // Fetch list of items
-            val stream = URL("$serverAddress/rest/items").openStream()
+            val stream = api("GET", "/items")
             val json = Parser.default().parse(stream) as JsonArray<JsonObject>
             items = json.map {
 
@@ -207,6 +238,29 @@ class OpenHAB {
         val address = JOptionPane.showInputDialog(null, "Enter the address to your OpenHAB2 server.\n\nFor remote servers with login, enter in the format: https://user:pass@server.com", serverAddress)
         if (address == null || address.isBlank())
             return@launch
+
+        // Save server
+        serverAddress = address
+        prefs.props.setProperty("server", serverAddress)
+        prefs.save()
+
+        // Refresh
+        refresh()
+
+    }
+
+    /** Called when the user wants to change the tag */
+    fun onTagChange() = GlobalScope.launch {
+
+        // Ask for new tag
+        val value = JOptionPane.showInputDialog(null, "Enter the tag to filter by. Only Items with this tag attached will appear in the menu.", queryTag)
+        if (value == null || value.isBlank())
+            return@launch
+
+        // Save it
+        queryTag = value
+        prefs.props.setProperty("queryTag", queryTag)
+        prefs.save()
 
         // Refresh
         refresh()
@@ -268,12 +322,19 @@ class OpenHAB {
     }
 
     /** Helper function to execute an API call */
-    private fun api(method : String, endpoint : String, body : String = "") {
+    private fun api(method : String, endpoint : String, body : String = "") : InputStream {
 
         // Send request
-        val url = "$serverAddress/rest$endpoint"
-        val conn = URL(url).openConnection() as HttpURLConnection
+        val url = URL("$serverAddress/rest$endpoint")
+        val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = method
+
+        // Set authentication if needed
+        if (url.userInfo != null) {
+            val decodedAuth = URLDecoder.decode(url.userInfo, "UTF8")
+            val basicAuth = "Basic " + String(Base64.getEncoder().encode(decodedAuth.toByteArray()))
+            conn.setRequestProperty("Authorization", basicAuth)
+        }
 
         // Apply body if it exists
         if (body.isNotBlank()) {
@@ -283,7 +344,7 @@ class OpenHAB {
         }
 
         // Check response
-        println("[API] $url -> ${conn.responseCode}")
+        println("[API] $method $endpoint -> ${conn.responseCode}")
         if (conn.responseCode == 200) {
             // Success
         } else if (conn.responseCode == 404) {
@@ -293,6 +354,9 @@ class OpenHAB {
         } else {
             throw Exception("Server returned code ${conn.responseCode}.")
         }
+
+        // Return input stream
+        return conn.inputStream
 
     }
 
