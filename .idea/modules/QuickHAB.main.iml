@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="QuickHAB:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.jjv360" external.system.module.type="sourceSet" external.system.module.version="1.0.1" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="QuickHAB:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.jjv360" external.system.module.type="sourceSet" external.system.module.version="1.0.2" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="3" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false" pureKotlinSourceFolders="C:\Users\jjv36\Dropbox (ydangle apps)\Interesting Stuff\QuickHAB\src\test\kotlin;C:\Users\jjv36\Dropbox (ydangle apps)\Interesting Stuff\QuickHAB\src\main\kotlin">
@@ -8,7 +8,7 @@
         </compilerSettings>
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../build/classes/kotlin/main" />
-          <option name="classpath" value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.50/bf65725d4ae2cf00010d84e945fcbc201f590e11/kotlin-stdlib-jdk8-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.0/36fa8555d92456448ec19e64b00be830df9a7fb5/kotlinx-coroutines-core-1.3.0.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/com.beust/klaxon/5.0.1/4c1ffe12cd890eef021808dfb2fe2993dfeaf0c9/klaxon-5.0.1.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.50/50ad05ea1c2595fb31b800e76db464d08d599af3/kotlin-stdlib-jdk7-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.2.60/33af8b35817e4c97a477a6a324032e0591d04f36/kotlin-reflect-1.2.60.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.50/b529d1738c7e98bbfa36a4134039528f2ce78ebf/kotlin-stdlib-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.50/3d9cd3e1bc7b92e95f43d45be3bfbcf38e36ab87/kotlin-stdlib-common-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.3.50/bf65725d4ae2cf00010d84e945fcbc201f590e11/kotlin-stdlib-jdk8-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.0/36fa8555d92456448ec19e64b00be830df9a7fb5/kotlinx-coroutines-core-1.3.0.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/com.beust/klaxon/5.0.1/4c1ffe12cd890eef021808dfb2fe2993dfeaf0c9/klaxon-5.0.1.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/com.dorkbox/SystemTray/3.17/1e8475bd439811d17d0b764e517ae29185e09284/SystemTray-3.17.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.3.50/50ad05ea1c2595fb31b800e76db464d08d599af3/kotlin-stdlib-jdk7-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.2.60/33af8b35817e4c97a477a6a324032e0591d04f36/kotlin-reflect-1.2.60.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.50/b529d1738c7e98bbfa36a4134039528f2ce78ebf/kotlin-stdlib-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.3.50/3d9cd3e1bc7b92e95f43d45be3bfbcf38e36ab87/kotlin-stdlib-common-1.3.50.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/com.dorkbox/ShellExecutor/1.1/98e71621507768fbd2c322c1a8ab8c22b02f98ad/ShellExecutor-1.1.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.javassist/javassist/3.23.0-GA/5c71cd6815cc207379639aca8c88478b7e959e35/javassist-3.23.0-GA.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna-platform/4.5.2/741853c07152f6c0fef5194efa6b2dabac22e9c0/jna-platform-4.5.2.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/net.java.dev.jna/jna/4.5.2/35d000afbaa4ed425d91873b40f4df9b8236875b/jna-4.5.2.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.25/da76ca59f6a57ee3102f8f9bd9cee742973efa8a/slf4j-api-1.7.25.jar;C:/Users/jjv36/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="QuickHAB" />
@@ -51,10 +51,16 @@
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.50" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0" level="project" />
     <orderEntry type="library" name="Gradle: com.beust:klaxon:5.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.dorkbox:SystemTray:3.17" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.2.60" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.3.50" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.50" level="project" />
+    <orderEntry type="library" name="Gradle: com.dorkbox:ShellExecutor:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.javassist:javassist:3.23.0-GA" level="project" />
+    <orderEntry type="library" name="Gradle: net.java.dev.jna:jna-platform:4.5.2" level="project" />
+    <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.5.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
   </component>
 </module>

@@ -3,12 +3,12 @@ import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.event.MouseListener
 import javax.imageio.ImageIO
 import javax.swing.JPopupMenu
 import com.sun.webkit.Invoker.setInvoker
+import dorkbox.systemTray.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.io.BufferedInputStream
@@ -21,6 +21,8 @@ import javax.swing.JOptionPane
 import javax.swing.UIManager
 import java.util.logging.Level.SEVERE
 import sun.util.logging.PlatformLogger
+import java.awt.Image
+import java.awt.event.ActionListener
 import java.io.InputStream
 import java.net.URLDecoder
 import java.util.*
@@ -42,7 +44,7 @@ class OpenHAB {
     private val prefs = Prefs("QuickHAB")
 
     /** Tray icon */
-    private val trayIcon : TrayIcon
+    private val tray : SystemTray
 
     /** Server base address */
     private var serverAddress = prefs.props.getProperty("server", "http://localhost:8080")
@@ -62,10 +64,11 @@ class OpenHAB {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
         // Create tray icon
+        tray = SystemTray.get()
+        tray.setTooltip("QuickHAB")
         val image = ImageIO.read(OpenHAB::class.java.getResourceAsStream("icon.png"))
-        val image2 = image.getScaledInstance(SystemTray.getSystemTray().trayIconSize.width, -1, Image.SCALE_SMOOTH)
-        trayIcon = TrayIcon(image2, "QuickHAB")
-        SystemTray.getSystemTray().add(trayIcon)
+        val image2 = image.getScaledInstance(tray.trayImageSize, -1, Image.SCALE_SMOOTH)
+        tray.setImage(image2)
 
         // Create menu
         createMenu()
@@ -95,17 +98,18 @@ class OpenHAB {
     /** Generates the right-click menu */
     fun createMenu() {
 
-        // Create menu
-        trayIcon.popupMenu = PopupMenu("QuickHAB")
+        // Reset menu
+        while (tray.menu.first != null)
+            tray.menu.remove(tray.menu.first)
 
         // Add each item
         items.filter { it.tags.contains(queryTag) }.forEach { item ->
 
             val menuItem = MenuItem(item.name)
-            menuItem.addActionListener {
+            menuItem.callback = ActionListener {
                 executeAction(item)
             }
-            trayIcon.popupMenu.add(menuItem)
+            tray.menu.add(menuItem)
 
         }
 
@@ -114,53 +118,53 @@ class OpenHAB {
 
             // Add no items found indicator
             val noItem = MenuItem(if (error.isBlank()) "No Items found" else "Unable to fetch Items")
-            noItem.isEnabled = error.isNotBlank()
-            noItem.addActionListener {
+            noItem.enabled = error.isNotBlank()
+            noItem.callback = ActionListener {
                 JOptionPane.showMessageDialog(null, error, "Unable to fetch Items", JOptionPane.WARNING_MESSAGE)
             }
-            trayIcon.popupMenu.add(noItem)
+            tray.menu.add(noItem)
 
         }
 
         // Create divider
-        trayIcon.popupMenu.addSeparator()
+        tray.menu.add(Separator())
 
         // Create refresh button
         val refresh = MenuItem("Refresh")
-        refresh.addActionListener { refresh() }
-        trayIcon.popupMenu.add(refresh)
+        refresh.callback = ActionListener { refresh() }
+        tray.menu.add(refresh)
 
         // Create settings button
         val settings = Menu("Settings")
-        trayIcon.popupMenu.add(settings)
+        tray.menu.add(settings)
 
         // Settings menu - server address
-        val server = MenuItem("Server: " + serverAddress)
-        server.addActionListener { onServer() }
+        val server = MenuItem("Server: $serverAddress")
+        server.callback = ActionListener { onServer() }
         settings.add(server)
 
         // Settings menu - tag name
-        val tag = MenuItem("Tag: " + queryTag)
-        tag.addActionListener { onTagChange() }
+        val tag = MenuItem("Tag: $queryTag")
+        tag.callback = ActionListener { onTagChange() }
         settings.add(tag)
 
         if (items.isNotEmpty()) {
 
             // Settings menu - divider
-            settings.addSeparator()
+            settings.add(Separator())
 
             // Settings menu - text
             val desc = MenuItem("Items with the '${queryTag}' tag:")
-            desc.isEnabled = false
+            desc.enabled = false
             settings.add(desc)
 
             // Settings menu - all items
             items.forEach { item ->
 
-                val menuItem = CheckboxMenuItem(item.name)
-                menuItem.state = item.tags.contains(queryTag)
-                menuItem.addItemListener {
-                    menuItem.state = item.tags.contains(queryTag)
+                val menuItem = Checkbox(item.name)
+                menuItem.checked = item.tags.contains(queryTag)
+                menuItem.callback = ActionListener {
+                    menuItem.checked = item.tags.contains(queryTag)
                     toggleTag(item)
                 }
                 settings.add(menuItem)
@@ -171,15 +175,15 @@ class OpenHAB {
 
         // Create about button
         val about = MenuItem("About")
-        about.addActionListener {
+        about.callback = ActionListener {
             JOptionPane.showMessageDialog(null, "This app allows you to quickly send ON actions to your OpenHAB items. You can select which items appear in the Settings menu. All items with a '$queryTag' tag attached will appear in the menu.", "QuickHAB $version", JOptionPane.INFORMATION_MESSAGE)
         }
-        trayIcon.popupMenu.add(about)
+        tray.menu.add(about)
 
         // Create quit button
         val quit = MenuItem("Quit")
-        quit.addActionListener { onQuit() }
-        trayIcon.popupMenu.add(quit)
+        quit.callback = ActionListener { onQuit() }
+        tray.menu.add(quit)
 
     }
 
@@ -225,7 +229,7 @@ class OpenHAB {
     fun onQuit() {
 
         // Remove tray icon
-        SystemTray.getSystemTray().remove(trayIcon)
+        tray.shutdown()
 
         // Done, the JVM should exit now that there's no UI stuff going on
 
