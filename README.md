@@ -21,6 +21,4 @@
 
 ## Changes needed
 
-- Store server settings
-- Modify query tag
 - Autorun on startup menu option
